@@ -1,6 +1,9 @@
 import { View, Text, StyleSheet, Image, Alert, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+import { RecentExpense } from "../../../components/recentExpense";
+import { ExpenseCategoryChart } from "../../../components/ExpenseCategoryChart";
+import { TextButton } from "../../../components/TextButton";
 import { IconAppButton } from "../../../components/IconAppButton";
 import { supabase } from "../../../lib/supabase";
 import { useAuth } from "../../../contexts/AuthContext";
@@ -61,7 +64,7 @@ export function InitialScreen() {
   }
 
   return (
-    <SafeAreaView style={styles.container} edges={["top"]}>
+    <SafeAreaView style={[styles.container, {backgroundColor: "#FFFFFF"}]} edges={["top"]}>
       <ScrollView
         style={styles.scrollView}
         contentContainerStyle={globalStyles.scrollContent}
@@ -88,7 +91,8 @@ export function InitialScreen() {
           )}
         </View>
 
-        <View style={styles.totalGastoMensalTable}>
+        {/* gasto total mes */}
+        <View style={styles.table}>
           <Text
             style={[
               globalStyles.secundaryText,
@@ -106,9 +110,34 @@ export function InitialScreen() {
               marginTop: 7,
             }}
           >
-            567,69$
+            0,00€
           </Text>
-          <Text style={globalStyles.infoArredondada}> -12% face a setembro</Text>
+          <Text style={globalStyles.infoArredondada}>
+            {" "}
+            -12% face a setembro
+          </Text>
+        </View>
+
+        {/* gasto categoria */}
+        <View style={{flexDirection: "row", justifyContent: "space-between",alignItems: "center",marginTop: 30,}}>
+          <Text style={[globalStyles.textBold, { fontSize: 23 }]}>Gastos por categoria</Text>
+          <TextButton titulo="Ver mais" style={{ color: "blue" }} onPress={() => console.log("teste")}/>
+        </View>
+
+        <View style={[styles.table, {marginTop: 10, paddingVertical: 20, paddingHorizontal: 10}]}>
+        <ExpenseCategoryChart />
+
+        </View>
+
+
+        {/* despesas recentes */}
+       <View  style={{flexDirection: "row", justifyContent: "space-between",alignItems: "center",marginTop: 30,}}>
+            <Text style={[globalStyles.textBold, { fontSize: 23}]}> Despesas Recentes</Text>
+            <TextButton titulo="Ver todas" style={{ color: "blue" }} onPress={() => console.log("teste")}/>
+        </View> 
+
+        <View style={[styles.table, {marginTop: 10, paddingVertical: 20, paddingHorizontal: 10}]}>
+         <RecentExpense />
         </View>
 
         <IconAppButton
@@ -165,12 +194,11 @@ const styles = StyleSheet.create({
     top: 90,
     right: -225,
   },
-
-  totalGastoMensalTable: {
+  table: {
     backgroundColor: "white",
     borderStyle: "solid",
     borderColor: "#E2EFFF",
     borderWidth: 1,
     borderRadius: 15,
-  },
+  }
 });
