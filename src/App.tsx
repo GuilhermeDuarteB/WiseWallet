@@ -4,6 +4,7 @@ import { useColorScheme } from "react-native";
 import { Navigation } from "./navigation";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { AuthProvider } from "./contexts/AuthContext";
+import { WiseBotButton } from "./components/WiseBotButton";
 
 export function App() {
   const colorScheme = useColorScheme();
@@ -14,6 +15,7 @@ export function App() {
     <SafeAreaProvider>
       <AuthProvider>
       <Navigation theme={theme} />
+      <WiseBotButton />
       </AuthProvider>
     </SafeAreaProvider>
   );

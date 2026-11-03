@@ -90,7 +90,6 @@ export function InitialScreen() {
             <Image source={{ uri: userImg }} style={styles.userImage} />
           )}
         </View>
-
         {/* gasto total mes */}
         <View style={styles.table}>
           <Text
