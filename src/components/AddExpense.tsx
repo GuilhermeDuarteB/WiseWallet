@@ -5,6 +5,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { Calendar, CalendarUtils } from "react-native-calendars";
 
 import "../types/calendarLocale";
+import { useNavigation } from "@react-navigation/native";
 
 export function AddExpense() {
   const [valor, setValor] = useState("");
@@ -16,6 +17,9 @@ export function AddExpense() {
 
   // controlar calendario
   const [calendarioAberto, setCalendarioAberto] = useState(false);
+
+  const navigation = useNavigation();
+
 
   return (
     <View style={styles.container}>

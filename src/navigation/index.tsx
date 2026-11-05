@@ -9,7 +9,7 @@ import { AuthProvider, useAuth } from "../contexts/AuthContext";
 import loading from "./screens/loading";
 import AppTabs from "./appTabs";
 import { InitialScreen as AuthInitialScreen } from "./screens/(auth)/InitialScreen";
-
+import { AddExpense } from "../components/AddExpense";
 //verifica se session ainda esta a dar loading
 function userIsLoading() {
   const { loading } = useAuth();
@@ -48,6 +48,11 @@ const RootStack = createNativeStackNavigator({
       screen: AuthInitialScreen,
       options: {
         headerShown: false,
+      },
+      AddExpense:{
+        screen: AddExpense,
+        options: {
+          headerShown: false,}
       },
     },
     Login: {

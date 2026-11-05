@@ -15,6 +15,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { InitialScreen } from "./screens/(panel)/InitialScreen";
 import { TransactionsScreen } from "./screens/(panel)/TransactionsScreen";
 import { AddExpense } from "../components/AddExpense";
+import { SelectExpenseType } from "../components/SelectExpenseType";
 
 // Ecrãs temporários
 function PlaceholderScreen({ titulo }: { titulo: string }) {
@@ -56,7 +57,7 @@ function AddTabButton() {
       {/* btn no menu */}
       <Pressable
         accessibilityRole="button"
-        accessibilityLabel="Adicionar despesa"
+        accessibilityLabel="Adiciona ao WiseWallet"
         onPress={abrirModal}
         style={styles.addTabButton}
       >
@@ -91,7 +92,7 @@ function AddTabButton() {
             <View style={styles.modalHandle} />
 
             <View style={styles.modalHeader}>
-              <Text style={styles.modalTitle}>Adicionar Despesa</Text>
+              <Text style={styles.modalTitle}>Adicionar ao WiseWallet</Text>
 
               <Pressable onPress={fecharModal} hitSlop={12}>
                 <Ionicons name="close" size={26} color="#0521C2" />
@@ -102,7 +103,7 @@ function AddTabButton() {
               keyboardShouldPersistTaps="handled"
               showsVerticalScrollIndicator={false}
             >
-              <AddExpense />
+              <SelectExpenseType />
             </ScrollView>
           </View>
         </View>
