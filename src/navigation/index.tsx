@@ -49,11 +49,6 @@ const RootStack = createNativeStackNavigator({
       options: {
         headerShown: false,
       },
-      AddExpense:{
-        screen: AddExpense,
-        options: {
-          headerShown: false,}
-      },
     },
     Login: {
       if: userIsSignedOut,
@@ -69,6 +64,11 @@ const RootStack = createNativeStackNavigator({
         headerShown: false,
       },
     },
+    AddExpense:{
+        screen: AddExpense,
+        options: {
+          headerShown: false,}
+      },
     Register: {
       if: userIsSignedOut,
       screen: Register,

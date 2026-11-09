@@ -34,30 +34,38 @@ function MoreScreen() {
   return <PlaceholderScreen titulo="Mais" />;
 }
 
-// por causa do add despesas o react precisa sempre de uma tela
+// Por causa do botão de adicionar, o React precisa sempre de um ecrã
 function EmptyScreen() {
   return null;
 }
 
-// btn + com modal
+// Botão + com modal
 function AddTabButton() {
   const [modalVisible, setModalVisible] = useState(false);
+  const [showAddExpense, setShowAddExpense] = useState(false);
+
   const insets = useSafeAreaInsets();
 
   function abrirModal() {
+    setShowAddExpense(false);
     setModalVisible(true);
   }
 
   function fecharModal() {
     setModalVisible(false);
+    setShowAddExpense(false);
+  }
+
+  function abrirFormularioDespesa() {
+    setShowAddExpense(true);
   }
 
   return (
     <>
-      {/* btn no menu */}
+      {/* Botão no menu */}
       <Pressable
         accessibilityRole="button"
-        accessibilityLabel="Adiciona ao WiseWallet"
+        accessibilityLabel="Adicionar ao WiseWallet"
         onPress={abrirModal}
         style={styles.addTabButton}
       >
@@ -66,7 +74,7 @@ function AddTabButton() {
         </View>
       </Pressable>
 
-      {/* modal settings */}
+      {/* Modal */}
       <Modal
         visible={modalVisible}
         transparent
@@ -75,14 +83,14 @@ function AddTabButton() {
         statusBarTranslucent
       >
         <View style={styles.modalOverlay}>
-          {/* fundo escuro */}
+          {/* Fundo escuro */}
           <Pressable
             style={StyleSheet.absoluteFill}
             onPress={fecharModal}
             accessibilityLabel="Fechar menu"
           />
 
-          {/* painel */}
+          {/* Painel */}
           <View
             style={[
               styles.modalContent,
@@ -92,7 +100,9 @@ function AddTabButton() {
             <View style={styles.modalHandle} />
 
             <View style={styles.modalHeader}>
-              <Text style={styles.modalTitle}>Adicionar ao WiseWallet</Text>
+              <Text style={styles.modalTitle}>
+                {showAddExpense ? "Nova despesa" : "Adicionar ao WiseWallet"}
+              </Text>
 
               <Pressable onPress={fecharModal} hitSlop={12}>
                 <Ionicons name="close" size={26} color="#0521C2" />
@@ -103,7 +113,11 @@ function AddTabButton() {
               keyboardShouldPersistTaps="handled"
               showsVerticalScrollIndicator={false}
             >
-              <SelectExpenseType />
+              {showAddExpense ? (
+                <AddExpense />
+              ) : (
+                <SelectExpenseType onSelectExpense={abrirFormularioDespesa} />
+              )}
             </ScrollView>
           </View>
         </View>
@@ -112,11 +126,10 @@ function AddTabButton() {
   );
 }
 
-// menu
+// Menu
 const Tabs = createBottomTabNavigator({
   screenOptions: {
     headerShown: false,
-
     animation: "fade",
 
     transitionSpec: {
@@ -177,7 +190,6 @@ const Tabs = createBottomTabNavigator({
       options: {
         title: "",
         tabBarLabel: () => null,
-
         tabBarButton: () => <AddTabButton />,
       },
     },
@@ -230,30 +242,23 @@ const styles = StyleSheet.create({
     color: "#0521C2",
   },
 
-  // Área clicável do botão central
   addTabButton: {
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
   },
 
-  // btn
   addButton: {
     position: "absolute",
     top: -22,
-
     width: 64,
     height: 64,
     borderRadius: 32,
-
     backgroundColor: "#0521C2",
-
     justifyContent: "center",
     alignItems: "center",
-
     borderWidth: 4,
     borderColor: "#FFFFFF",
-
     elevation: 5,
     shadowColor: "#000",
     shadowOpacity: 0.15,
@@ -264,14 +269,12 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
   },
 
-  // Fundo escurecido
   modalOverlay: {
     flex: 1,
     justifyContent: "flex-end",
     backgroundColor: "rgba(0, 0, 0, 0.45)",
   },
 
-  // Painel do formulário
   modalContent: {
     backgroundColor: "#FFFFFF",
     borderTopLeftRadius: 28,

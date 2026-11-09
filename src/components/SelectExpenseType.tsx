@@ -3,49 +3,68 @@ import { Ionicons } from "@expo/vector-icons";
 import { globalStyles } from "../styles/globalStyles";
 
 import "../types/calendarLocale";
-import { useNavigation } from "@react-navigation/native";
 
-export function SelectExpenseType() {
+type SelectExpenseTypeProps = {
+  onSelectExpense: () => void;
+};
 
-    const navigation = useNavigation();
-    
+export function SelectExpenseType({ onSelectExpense }: SelectExpenseTypeProps) {
   return (
-    <View style={[globalStyles.scrollView, { flex: 1 }]}> 
+    <View style={[globalStyles.scrollView, { flex: 1 }]}>
       <View style={styles.container}>
-        
-        <TouchableOpacity style={styles.TypeRowBtn} onPress={() => navigation.navigate("AddExpense" as never)}>
+        <TouchableOpacity style={styles.TypeRowBtn} onPress={onSelectExpense}>
           <View style={[styles.btnIcon, { backgroundColor: "#F59E0B" }]}>
             <Ionicons name="add-outline" size={30} color="white" />
           </View>
+
           <View style={styles.textContainer}>
             <Text style={styles.titleText}>Nova Despesa</Text>
             <Text style={styles.subtitleText}>Registar um gasto</Text>
           </View>
-          <Ionicons name="chevron-forward-outline" size={20} color="#1B88DF" style={styles.chevron} />
+
+          <Ionicons
+            name="chevron-forward-outline"
+            size={20}
+            color="#1B88DF"
+            style={styles.chevron}
+          />
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.TypeRowBtn}>
           <View style={[styles.btnIcon, { backgroundColor: "#9561D8" }]}>
             <Ionicons name="add-outline" size={30} color="white" />
           </View>
+
           <View style={styles.textContainer}>
             <Text style={styles.titleText}>Nova Categoria</Text>
             <Text style={styles.subtitleText}>Criar uma nova secção</Text>
           </View>
-          <Ionicons name="chevron-forward-outline" size={20} color="#1B88DF" style={styles.chevron} />
+
+          <Ionicons
+            name="chevron-forward-outline"
+            size={20}
+            color="#1B88DF"
+            style={styles.chevron}
+          />
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.TypeRowBtn}>
           <View style={[styles.btnIcon, { backgroundColor: "#16A879" }]}>
             <Ionicons name="add-outline" size={30} color="white" />
           </View>
+
           <View style={styles.textContainer}>
             <Text style={styles.titleText}>Outra Opção</Text>
             <Text style={styles.subtitleText}>Descrição complementar aqui</Text>
           </View>
-          <Ionicons name="chevron-forward-outline" size={20} color="#1B88DF" style={styles.chevron} />
-        </TouchableOpacity>
 
+          <Ionicons
+            name="chevron-forward-outline"
+            size={20}
+            color="#1B88DF"
+            style={styles.chevron}
+          />
+        </TouchableOpacity>
       </View>
     </View>
   );
