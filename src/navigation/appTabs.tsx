@@ -114,7 +114,7 @@ function AddTabButton() {
               showsVerticalScrollIndicator={false}
             >
               {showAddExpense ? (
-                <AddExpense />
+                <AddExpense onExpenseSaved={fecharModal} />
               ) : (
                 <SelectExpenseType onSelectExpense={abrirFormularioDespesa} />
               )}

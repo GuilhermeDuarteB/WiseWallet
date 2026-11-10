@@ -5,4 +5,5 @@ export type Expense = {
     amount: string,
     description?: string,
     date: string,
+    notes?: string,
 }

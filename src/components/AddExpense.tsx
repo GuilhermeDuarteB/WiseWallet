@@ -7,6 +7,7 @@ import {
   StyleSheet,
   Pressable,
   TouchableOpacity,
+  Alert,
 } from "react-native";
 
 import { Ionicons } from "@expo/vector-icons";
@@ -14,12 +15,18 @@ import { Calendar, CalendarUtils } from "react-native-calendars";
 
 import "../types/calendarLocale";
 import { categories } from "../constants/categories";
-
-export function AddExpense() {
+import { useExpenses } from "../contexts/ExpenseContext";
+type AddExpenseProps = {
+  onExpenseSaved: () => void;
+};
+export function AddExpense({ onExpenseSaved }: AddExpenseProps) {
   // Estados do formulário
   const [valor, setValor] = useState("");
   const [categoriaSelecionada, setCategoriaSelecionada] = useState("");
   const [mostrarTodasCategorias, setMostrarTodasCategorias] = useState(false);
+  const [descricao, setDescricao] = useState("");
+  const [observacoes, setObservacoes] = useState("");
+  const { addExpense } = useExpenses();
 
   // Data da despesa e visibilidade do calendário
   const [dataSelecionada, setDataSelecionada] = useState(() =>
@@ -31,6 +38,51 @@ export function AddExpense() {
   const categoriasVisiveis = mostrarTodasCategorias
     ? categories
     : categories.slice(0, 4);
+
+//funcao de validar Form
+function validarFormulario() {
+  const valorNumerico = parseFloat(valor.replace(",", "."));
+
+  if(!valor.trim() || !Number.isFinite(valorNumerico) || valorNumerico <= 0) {
+    Alert.alert("Erro", "Por favor, insira um valor válido para a despesa.");
+    console.log("Valor inválido:", valor);
+    return false;
+  }
+
+  if(!categoriaSelecionada) {
+    Alert.alert("Erro", "Por favor, selecione uma categoria para a despesa.");
+    console.log("Nenhuma categoria selecionada.");
+    return false;
+  }
+
+  return true;
+}
+
+// function de guardar despesa
+//funcao blabla
+async function handleGuardar(){
+ const formularioValido = validarFormulario();
+
+ if (!formularioValido){
+  return
+ }
+
+ try{
+  await addExpense({
+    amount: valor.trim().replace(",", "."),
+    categoryId: categoriaSelecionada,
+    date: dataSelecionada,
+    description: descricao.trim() || undefined,
+    notes: observacoes.trim() || undefined,
+  });
+
+   Alert.alert("Sucesso", "Despesa guardada com sucesso!");
+   onExpenseSaved();
+
+ }catch (error) {
+  console.error("Erro ao guardar a despesa:", error);
+  Alert.alert("Erro", "Ocorreu um erro ao guardar a despesa. Por favor, tente novamente.");
+}}
 
   return (
     <View style={styles.container}>
@@ -126,6 +178,8 @@ export function AddExpense() {
             style={styles.textInput}
             placeholder="Ex.: Almoço no restaurante"
             placeholderTextColor="#9AA6BA"
+            value={descricao}
+            onChangeText={setDescricao}
           />
         </View>
       </View>
@@ -185,7 +239,7 @@ export function AddExpense() {
         )}
       </View>
 
-      {/* Observações */}
+      {/* obs */}
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>
           Observações
@@ -197,15 +251,17 @@ export function AddExpense() {
           placeholder="Adicionar uma nota..."
           placeholderTextColor="#9AA6BA"
           multiline
+          value={observacoes}
+          onChangeText={setObservacoes}
           textAlignVertical="top"
         />
       </View>
 
       {/* Botão de guardar */}
-      <View style={styles.saveButton}>
+      <Pressable onPress={handleGuardar} style = {styles.saveButton}>
         <Ionicons name="checkmark-circle-outline" size={22} color="#FFFFFF" />
         <Text style={styles.saveButtonText}>Guardar despesa</Text>
-      </View>
+      </Pressable>
     </View>
   );
 }
