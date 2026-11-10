@@ -1,29 +1,40 @@
+
 import { useState } from "react";
-import { View, Text, TextInput, StyleSheet, Pressable } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  StyleSheet,
+  Pressable,
+  TouchableOpacity,
+} from "react-native";
 
 import { Ionicons } from "@expo/vector-icons";
 import { Calendar, CalendarUtils } from "react-native-calendars";
 
 import "../types/calendarLocale";
-import { useNavigation } from "@react-navigation/native";
+import { categories } from "../constants/categories";
 
 export function AddExpense() {
+  // Estados do formulário
   const [valor, setValor] = useState("");
+  const [categoriaSelecionada, setCategoriaSelecionada] = useState("");
+  const [mostrarTodasCategorias, setMostrarTodasCategorias] = useState(false);
 
-  // data
+  // Data da despesa e visibilidade do calendário
   const [dataSelecionada, setDataSelecionada] = useState(() =>
-    CalendarUtils.getCalendarDateString(new Date()),
+    CalendarUtils.getCalendarDateString(new Date())
   );
-
-  // controlar calendario
   const [calendarioAberto, setCalendarioAberto] = useState(false);
 
-  const navigation = useNavigation();
-
+  // Mostra quatro categorias ou todas, conforme o estado.
+  const categoriasVisiveis = mostrarTodasCategorias
+    ? categories
+    : categories.slice(0, 4);
 
   return (
     <View style={styles.container}>
-      {/* VALOR */}
+      {/* Valor */}
       <View style={styles.valorCard}>
         <Text style={styles.valorLabel}>VALOR DA DESPESA</Text>
 
@@ -44,58 +55,67 @@ export function AddExpense() {
         <Text style={styles.valorHint}>Quanto gastaste?</Text>
       </View>
 
-      {/* cats */}
+      {/* Categorias */}
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Categoria</Text>
 
         <View style={styles.categoriasContainer}>
-          {/* Alimentação */}
-          <View style={styles.categoria}>
-            <View
-              style={[styles.categoriaIcon, { backgroundColor: "#FFF1DC" }]}
-            >
-              <Ionicons name="restaurant-outline" size={24} color="#F59E0B" />
-            </View>
+          {categoriasVisiveis.map((categoria) => {
+            const selecionada = categoriaSelecionada === categoria.id;
 
-            <Text style={styles.categoriaText}>Alimentação</Text>
-          </View>
+            return (
+              <TouchableOpacity
+                key={categoria.id}
+                style={styles.categoria}
+                onPress={() => setCategoriaSelecionada(categoria.id)}
+                activeOpacity={0.7}
+              >
+                <View
+                  style={[
+                    styles.categoriaIcon,
+                    { backgroundColor: `${categoria.color}20` },
+                    selecionada && styles.categoriaSelecionada,
+                  ]}
+                >
+                  <Ionicons
+                    name={categoria.icon as keyof typeof Ionicons.glyphMap}
+                    size={24}
+                    color={categoria.color}
+                  />
+                </View>
 
-          {/* Transportes */}
-          <View style={styles.categoria}>
-            <View
-              style={[styles.categoriaIcon, { backgroundColor: "#E4EEFF" }]}
-            >
-              <Ionicons name="car-outline" size={24} color="#3878E8" />
-            </View>
-
-            <Text style={styles.categoriaText}>Transportes</Text>
-          </View>
-
-          {/* Habitação */}
-          <View style={styles.categoria}>
-            <View
-              style={[styles.categoriaIcon, { backgroundColor: "#E0F8EF" }]}
-            >
-              <Ionicons name="home-outline" size={24} color="#16A879" />
-            </View>
-
-            <Text style={styles.categoriaText}>Habitação</Text>
-          </View>
-
-          {/* compras */}
-          <View style={styles.categoria}>
-            <View
-              style={[styles.categoriaIcon, { backgroundColor: "#F0E7FF" }]}
-            >
-              <Ionicons name="bag-outline" size={24} color="#9561D8" />
-            </View>
-
-            <Text style={styles.categoriaText}>Compras</Text>
-          </View>
+                <Text
+                  style={[
+                    styles.categoriaText,
+                    selecionada && styles.categoriaTextSelecionada,
+                  ]}
+                >
+                  {categoria.name}
+                </Text>
+              </TouchableOpacity>
+            );
+          })}
         </View>
+
+        {/* Expandir ou esconder as restantes categorias */}
+        <TouchableOpacity
+          style={styles.verCategoriasButton}
+          onPress={() => setMostrarTodasCategorias(!mostrarTodasCategorias)}
+          activeOpacity={0.7}
+        >
+          <Text style={styles.verCategoriasText}>
+            {mostrarTodasCategorias ? "Mostrar menos" : "Ver todas as categorias"}
+          </Text>
+
+          <Ionicons
+            name={mostrarTodasCategorias ? "chevron-up" : "chevron-down"}
+            size={18}
+            color="#0521C2"
+          />
+        </TouchableOpacity>
       </View>
 
-      {/* desc */}
+      {/* Descrição */}
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Descrição</Text>
 
@@ -110,11 +130,10 @@ export function AddExpense() {
         </View>
       </View>
 
-      {/* data */}
+      {/* Data */}
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Data</Text>
 
-        {/* abrir fechar calendario */}
         <Pressable
           style={styles.inputContainer}
           onPress={() => setCalendarioAberto(!calendarioAberto)}
@@ -132,18 +151,16 @@ export function AddExpense() {
           />
         </Pressable>
 
-        {/* so aparece se calendarioaberto = true */}
+        {/* O calendário só aparece quando é aberto. */}
         {calendarioAberto && (
           <View style={styles.calendarContainer}>
             <Calendar
               current={dataSelecionada}
               firstDay={1}
-              // user seleciona data
               onDayPress={(day) => {
                 setDataSelecionada(day.dateString);
                 setCalendarioAberto(false);
               }}
-              // data selecionada
               markedDates={{
                 [dataSelecionada]: {
                   selected: true,
@@ -151,7 +168,6 @@ export function AddExpense() {
                   selectedTextColor: "#FFFFFF",
                 },
               }}
-              // cores
               theme={{
                 calendarBackground: "#FFFFFF",
                 monthTextColor: "#0521C2",
@@ -169,7 +185,7 @@ export function AddExpense() {
         )}
       </View>
 
-      {/* obs */}
+      {/* Observações */}
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>
           Observações
@@ -185,10 +201,9 @@ export function AddExpense() {
         />
       </View>
 
-      {/* btn guardar */}
+      {/* Botão de guardar */}
       <View style={styles.saveButton}>
         <Ionicons name="checkmark-circle-outline" size={22} color="#FFFFFF" />
-
         <Text style={styles.saveButtonText}>Guardar despesa</Text>
       </View>
     </View>
@@ -196,12 +211,23 @@ export function AddExpense() {
 }
 
 const styles = StyleSheet.create({
+  // Estrutura geral
   container: {
     paddingBottom: 20,
     gap: 22,
   },
 
-  // vlr
+  section: {
+    gap: 12,
+  },
+
+  sectionTitle: {
+    fontSize: 15,
+    fontWeight: "700",
+    color: "#1F2C47",
+  },
+
+  // Valor
   valorCard: {
     backgroundColor: "#F0F5FF",
     borderRadius: 22,
@@ -248,26 +274,16 @@ const styles = StyleSheet.create({
     marginTop: 4,
   },
 
-  // seccao
-  section: {
+  // Categorias
+  categoriasContainer: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "flex-start",
     gap: 12,
   },
 
-  sectionTitle: {
-    fontSize: 15,
-    fontWeight: "700",
-    color: "#1F2C47",
-  },
-
-  // cat
-  categoriasContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    gap: 6,
-  },
-
   categoria: {
-    flex: 1,
+    width: "22%",
     alignItems: "center",
     gap: 7,
   },
@@ -280,6 +296,11 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
 
+  categoriaSelecionada: {
+    borderWidth: 2,
+    borderColor: "#0521C2",
+  },
+
   categoriaText: {
     fontSize: 10,
     color: "#566580",
@@ -287,7 +308,26 @@ const styles = StyleSheet.create({
     fontWeight: "500",
   },
 
-  // inputs
+  categoriaTextSelecionada: {
+    color: "#0521C2",
+    fontWeight: "700",
+  },
+
+  verCategoriasButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 6,
+    paddingVertical: 10,
+  },
+
+  verCategoriasText: {
+    color: "#0521C2",
+    fontSize: 13,
+    fontWeight: "600",
+  },
+
+  // Campos de texto
   inputContainer: {
     flexDirection: "row",
     alignItems: "center",
@@ -304,12 +344,6 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 14,
     color: "#1F2C47",
-  },
-
-  placeholderText: {
-    flex: 1,
-    fontSize: 14,
-    color: "#9AA6BA",
   },
 
   optionalText: {
@@ -329,7 +363,7 @@ const styles = StyleSheet.create({
     color: "#1F2C47",
   },
 
-  // datea
+  // Calendário
   dataText: {
     flex: 1,
     fontSize: 15,
@@ -344,7 +378,6 @@ const styles = StyleSheet.create({
     borderColor: "#E5EAF3",
     padding: 8,
     overflow: "hidden",
-
     shadowColor: "#000",
     shadowOpacity: 0.08,
     shadowOffset: {
@@ -355,7 +388,7 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
 
-  // btn guardar
+  // Botão de guardar
   saveButton: {
     flexDirection: "row",
     alignItems: "center",
