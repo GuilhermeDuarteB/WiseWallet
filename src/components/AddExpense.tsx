@@ -169,7 +169,9 @@ async function handleGuardar(){
 
       {/* Descrição */}
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Descrição</Text>
+        <Text style={styles.sectionTitle}>Descrição
+           <Text style={styles.optionalText}> (opcional)</Text>
+        </Text>
 
         <View style={styles.inputContainer}>
           <Ionicons name="create-outline" size={20} color="#8391AB" />

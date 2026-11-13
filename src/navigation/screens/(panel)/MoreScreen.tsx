@@ -98,11 +98,24 @@ export function MoreScreen() {
             iconSize={50}
             icon2="arrow-forward-outline"
           />
+
+          <Text style={[globalStyles.subtitle, {marginTop: 25, color: "#676363"}]}>
+                Definições
+            </Text>
+
+            <RowOptions
+            titulo="Preferências"
+            description="Moeda e outras preferências"
+            icon="cog-outline"
+            iconColor="black"
+            iconSize={50}
+            icon2="arrow-forward-outline"
+          />
         </View>
 
         <IconAppButton
           titulo="Terminar Sessão"
-          simbolo="arrow-back-outline"
+          simbolo="log-out-outline"
           onPress={handleSignOut}
         />
       </ScrollView>
