@@ -14,6 +14,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { InitialScreen } from "./screens/(panel)/InitialScreen";
 import { TransactionsScreen } from "./screens/(panel)/TransactionsScreen";
+import { MoreScreen } from "./screens/(panel)/MoreScreen";
 import { AddExpense } from "../components/AddExpense";
 import { SelectExpenseType } from "../components/SelectExpenseType";
 
@@ -30,9 +31,6 @@ function StatisticsScreen() {
   return <PlaceholderScreen titulo="Estatísticas" />;
 }
 
-function MoreScreen() {
-  return <PlaceholderScreen titulo="Mais" />;
-}
 
 // Por causa do botão de adicionar, o React precisa sempre de um ecrã
 function EmptyScreen() {

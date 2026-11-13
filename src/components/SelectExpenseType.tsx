@@ -36,8 +36,8 @@ export function SelectExpenseType({ onSelectExpense }: SelectExpenseTypeProps) {
           </View>
 
           <View style={styles.textContainer}>
-            <Text style={styles.titleText}>Nova Categoria</Text>
-            <Text style={styles.subtitleText}>Criar uma nova secção</Text>
+            <Text style={styles.titleText}>Despesa Recorrente</Text>
+            <Text style={styles.subtitleText}>Agendar um Pagamento</Text>
           </View>
 
           <Ionicons
@@ -54,8 +54,8 @@ export function SelectExpenseType({ onSelectExpense }: SelectExpenseTypeProps) {
           </View>
 
           <View style={styles.textContainer}>
-            <Text style={styles.titleText}>Outra Opção</Text>
-            <Text style={styles.subtitleText}>Descrição complementar aqui</Text>
+            <Text style={styles.titleText}>Nova Dívida</Text>
+            <Text style={styles.subtitleText}>Valor a Pagar ou a Dever</Text>
           </View>
 
           <Ionicons

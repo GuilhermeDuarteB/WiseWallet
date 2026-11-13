@@ -4,8 +4,6 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { RecentExpense } from "../../../components/recentExpense";
 import { ExpenseCategoryChart } from "../../../components/ExpenseCategoryChart";
 import { TextButton } from "../../../components/TextButton";
-import { IconAppButton } from "../../../components/IconAppButton";
-import { supabase } from "../../../lib/supabase";
 import { useAuth } from "../../../contexts/AuthContext";
 import { globalStyles } from "../../../styles/globalStyles";
 
@@ -50,21 +48,11 @@ export function InitialScreen() {
   const userImg =
     user?.user_metadata?.avatar_url ?? user?.user_metadata?.picture;
 
-  // Terminar sessão
-  async function handleSignOut() {
-    const { error } = await supabase.auth.signOut();
-
-    if (error) {
-      Alert.alert("Erro", "Erro ao tentar sair da conta.");
-      console.log("erro logou:", error.message);
-      return;
-    }
-
-    console.log("sessao terminada");
-  }
+    const indiceMesAnterior = hoje.getMonth() === 0 ? 11 : hoje.getMonth() - 1;
+const mesFace = mesesAno[indiceMesAnterior];
 
   return (
-    <SafeAreaView style={[styles.container, {backgroundColor: "#FFFFFF"}]} edges={["top"]}>
+    <SafeAreaView style={[styles.container, { backgroundColor: "#FFFFFF" }]} edges={["top"]}>
       <ScrollView
         style={styles.scrollView}
         contentContainerStyle={globalStyles.scrollContent}
@@ -86,9 +74,7 @@ export function InitialScreen() {
             </Text>
           </View>
 
-          {userImg && (
-            <Image source={{ uri: userImg }} style={styles.userImage} />
-          )}
+          <Image source={userImg ? { uri: userImg } : require("../../../assets/default_user_logo.jpg")} style={styles.userImage} />
         </View>
         {/* gasto total mes */}
         <View style={styles.table}>
@@ -113,37 +99,33 @@ export function InitialScreen() {
           </Text>
           <Text style={globalStyles.infoArredondada}>
             {" "}
-            -12% face a setembro
+            0% face a {mesFace}
           </Text>
         </View>
 
         {/* gasto categoria */}
-        <View style={{flexDirection: "row", justifyContent: "space-between",alignItems: "center",marginTop: 30,}}>
+        <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginTop: 30, }}>
           <Text style={[globalStyles.textBold, { fontSize: 23 }]}>Gastos por categoria</Text>
-          <TextButton titulo="Ver mais" style={{ color: "blue" }} onPress={() => console.log("teste")}/>
+          <TextButton titulo="Ver mais" style={{ color: "blue" }} onPress={() => console.log("teste")} />
         </View>
 
-        <View style={[styles.table, {marginTop: 10, paddingVertical: 20, paddingHorizontal: 10}]}>
-        <ExpenseCategoryChart />
+        <View style={[styles.table, { marginTop: 10, paddingVertical: 20, paddingHorizontal: 10 }]}>
+          <ExpenseCategoryChart />
 
         </View>
 
 
         {/* despesas recentes */}
-       <View  style={{flexDirection: "row", justifyContent: "space-between",alignItems: "center",marginTop: 30,}}>
-            <Text style={[globalStyles.textBold, { fontSize: 23}]}> Despesas Recentes</Text>
-            <TextButton titulo="Ver todas" style={{ color: "blue" }} onPress={() => console.log("teste")}/>
-        </View> 
-
-        <View style={[styles.table, {marginTop: 10, paddingVertical: 20, paddingHorizontal: 10}]}>
-         <RecentExpense />
+        <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginTop: 30, }}>
+          <Text style={[globalStyles.textBold, { fontSize: 23 }]}> Despesas Recentes</Text>
+          <TextButton titulo="Ver todas" style={{ color: "blue" }} onPress={() => console.log("teste")} />
         </View>
 
-        <IconAppButton
-          titulo="Sair"
-          simbolo="arrow-back-outline"
-          onPress={handleSignOut}
-        />
+        <View style={[styles.table, { marginTop: 10, paddingVertical: 20, paddingHorizontal: 10 }]}>
+          <RecentExpense />
+        </View>
+
+
       </ScrollView>
     </SafeAreaView>
   );

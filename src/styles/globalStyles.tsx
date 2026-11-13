@@ -12,6 +12,9 @@ export const globalStyles = StyleSheet.create({
     color: "#fff",
     marginBottom: 10,
   },
+  blueTitle:{
+
+  },
   slogan: {
     fontSize: 20,
     color: "white",
